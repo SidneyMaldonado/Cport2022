@@ -12,10 +12,12 @@ public class Compilador {
 		AnalisadorLexico al = new AnalisadorLexico();
 		AnalisadorSintatico as = new AnalisadorSintatico();
 		AnalisadorSemantico ase = new AnalisadorSemantico();
+		Interpretador it = new Interpretador();
 
 		al.analisar(arquivos.alfabeto,arquivos.programa);
 		as.analisar(arquivos.programa, arquivos.expressoes);
 		ase.analisar(arquivos.programa, arquivos.dicionario);
+		it.executar(arquivos.programa);
 
 	}
 
