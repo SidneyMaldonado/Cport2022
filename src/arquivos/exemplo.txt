@@ -1,20 +1,22 @@
 Taboada {
-int i
-int r
-int n
-escreva "Digite um numero:"
-leia n
-escreva n
-   para i = 1 ate 10 {
-     r = i * n
-     escreva n
-     escreva " x "
-     escreva i
-     escreva " = "
-     escreva r
-     novalinha
-     se i > 5 {
-       escreva "maior que 5"
-     }
-   }
+	int i
+	int r
+	int n
+	escreva "Digite um numero:"
+	leia n
+	escreva n
+	novalinha
+	   para i = 1 ate 10 {
+	     r = i * n
+	     escreva n
+	     escreva " x "
+	     escreva i
+	     escreva " = "
+	     escreva r
+	     escreva "   "
+	     se i > 5 {
+	       escreva "maior que 5"
+	     }
+	     novalinha
+	   }
 }

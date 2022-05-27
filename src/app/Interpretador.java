@@ -17,33 +17,101 @@ public class Interpretador {
 		System.out.println("Interpretando o programa...");
 		int numeroLinha = 0;
 		processarLinha(programa.get(0), numeroLinha);
+		System.out.println("");
 		System.out.println("Fim do interpretador...");
 	}
 	public void processarLinha(String linha, int nr) {
 		System.out.println("  processando linha:"+nr +": " + linha);
 		
 		if (nr == 0) { // estou no titulo do programa
-			// o bloco comeca na linha 1
-			fazer( programa, 1);
+					   // o bloco comeca na linha 1
+			int fb = encontrarFimBloco(programa,1);
+			System.out.println("bloco: 1 ate "+fb);
+			fazer( programa, 1, fb);
 		}
 		
 	}
-	public int fazer(List<String> programa, int numeroLinha) {
-		//System.out.println("---" + numeroLinha);
-		for(int i=numeroLinha; i < programa.size();i++) {
-			String linha = programa.get(i);
-			processarInstrucao(linha);
-			if (linha.contains("{")) {
-				i = fazer(programa, i+1);
+	
+	public int encontrarFimBloco(List<String> programa, int inicio) {
+		int fb = 0;
+		for(int i=inicio; i<programa.size();i++) {
+			if (programa.get(i).contains("{")) {
+				fb++;
 			}
-			if (linha.contains("}")) {
-				return i;
+			if (programa.get(i).contains("}")) {
+				fb--;
+				if (fb < 0) {
+					return i;
+				}
 			}
 		}
-		return numeroLinha;
+		return fb;
+	}
+	public int fazer(List<String> programa, int numeroLinha, int linhaFinal) {
+		int fb = 0;
+		for(int i=numeroLinha; i < linhaFinal;i++) {
+			String linha = programa.get(i).trim();
+			String[] token = linha.trim().split(" ");
+			if (linha.contains("}")) {
+				return linhaFinal+1;
+			}
+			if (linha.contains("{")) {
+				if (linha.contains("para")) {
+					int n = processarPara(linha);
+					fb = encontrarFimBloco(programa,i+1 );
+					for(int j = 0;j<n;j++) {
+						tabela.put(token[1], j);
+						fazer(programa,i+1, fb );
+					}
+					i = fb;
+				} else if (linha.startsWith("se")) {
+					fb = encontrarFimBloco(programa,i+1 );
+					if ( processarSe(linha)) {
+						fazer(programa,i+1, fb );
+					}
+					i = fb;
+				} else {
+					i = fazer(programa,i+1, fb );
+				}
+				numeroLinha = fb;
+			} else {
+			   processarInstrucao(linha);
+			}
+		}
+		return numeroLinha+1;
 	}
 	
-	public void processarInstrucao( String comando) {
+	public Boolean processarSe(String comando) {
+		String[] token = comando.trim().split(" ");
+		
+		int valor1 = tabela.get(token[1]);
+		int valor2 = Integer.parseInt(token[3]);
+		String operador = token[2];
+		if (operador.equals("=")) {
+			return valor1 == valor2;
+		}
+		if (operador.equals(">")) {
+			return valor1 > valor2;
+		}		
+		if (operador.equals("<")) {
+			return valor1 < valor2;
+		}			
+		if (operador.equals("!")) {
+			return valor1 != valor2;
+		}		
+		return false;
+	}
+	public int processarPara(String comando) {
+		String[] token = comando.split(" ");
+		
+		if (token[0].equals("para")) {
+			int n = Integer.parseInt(token[5]);
+			return n;
+		}
+		return 1;
+	}
+	
+	public void processarInstrucao(String comando) {
 		String[] token = comando.split(" ");
 		// processamento do int
 		if (token[0].equals("int")) {
@@ -53,10 +121,10 @@ public class Interpretador {
 		if (token[0].equals("escreva")) {
 			// se estiver na tabela de simbolos
 			if (tabela.containsKey(token[1])) {
-				System.out.println(tabela.get(token[1]));
+				System.out.print(tabela.get(token[1]));
 			} else {
 				String texto = comando.replace("escreva ", "").replace("\"","");
-				System.out.println(texto);
+				System.out.print(texto);
 			}
 		}
 		
@@ -71,6 +139,9 @@ public class Interpretador {
 		if (tabela.containsKey(token[0]))
 		if (token[1].equals("=")) {
 			processarAtribuicao(token);
+		}
+		if (token[0].equals("novalinha")) {
+			System.out.println(" ");
 		}
 	}
 	
