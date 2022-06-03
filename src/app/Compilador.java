@@ -1,5 +1,6 @@
 package app;
 import java.io.IOException;
+import java.util.List;
 
 public class Compilador {
 
@@ -13,11 +14,14 @@ public class Compilador {
 		AnalisadorSintatico as = new AnalisadorSintatico();
 		AnalisadorSemantico ase = new AnalisadorSemantico();
 		Interpretador it = new Interpretador();
+		Build build = new Build();
 
 		al.analisar(arquivos.alfabeto,arquivos.programa);
 		as.analisar(arquivos.programa, arquivos.expressoes);
 		ase.analisar(arquivos.programa, arquivos.dicionario);
-		it.executar(arquivos.programa);
+		//it.executar(arquivos.programa);
+		List<String> byteCode = build.Compilar(arquivos.programa);
+		arquivos.gravarArquivo(byteCode, "Exemplo");
 
 	}
 

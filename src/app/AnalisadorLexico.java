@@ -6,7 +6,7 @@ public class AnalisadorLexico {
 	public void analisar(String[] alfabeto, List<String> programa) {
 		int erros = 0;
 		for(String linha: programa) {
-			String[] letras = linha.split("");
+			String[] letras = linha.trim().split("");
 			for (String letra: letras) {
 			//	System.out.print("letra: " + letra + " => ");
 				if (!verificarSeALetraEstaNoAlfabeto(letra, alfabeto)) {
