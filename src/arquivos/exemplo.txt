@@ -21,7 +21,7 @@ Taboada {
 	   }
 	i = 0
 	enquanto x < 10 faca {
-	     r = r = 1 
+	     r = r + i 
 	     i = i + 1
 	}
 }
