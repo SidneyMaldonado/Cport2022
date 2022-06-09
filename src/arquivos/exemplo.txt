@@ -20,7 +20,7 @@ Taboada {
 	     novalinha
 	   }
 	i = 0
-	while x < 10 faca {
+	enquanto x < 10 faca {
 	     r = r = 1 
 	     i = i + 1
 	}
